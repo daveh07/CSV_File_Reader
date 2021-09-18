@@ -12,17 +12,19 @@ class csv_reader:
         super().__init__()
 
     def readFile(self):
-        file = open("users.csv")
-        csvreader = csv.reader(file)
-        header = next(csvreader)
-        print(header)
+        with open("users.csv", 'r') as csvfile:          # Open CSV file
+            csvreader = csv.reader(csvfile)              # Read file using Pythons csv.reader module
+            header = next(csvreader)                     # Create list for the header titles
+            print(header)                                # Print header list
 
-        rows = []
-        for row in csvreader:
-            rows.append(row)
-        print(rows)
+            rows = []                                    # Create empty list to fill with CSV row data
+            for row in csvreader:                        # Iterate through rows in CSV readable file
+                rows.append(row)                         # Append rows to rows list
+            print(rows)                                  # Print rows to see correct rows are appended
 
-        file.close()
+# Method to iterate through the name and last names in the CSV file and capitalize names
+    def titleNames(self):
+        pass
 
 
 # Create class instances to read file:
