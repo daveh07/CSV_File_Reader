@@ -16,11 +16,9 @@ class csv_reader:
     # Function to clean the CSV file from whitespaces, tabs, special characters & validate legal email addresses
     def cleanFile(self):
 
-
         fname = input("Input name of csv file you want to open in format 'example.csv': ")
-
         if fname.endswith(".csv"):
-            print(f"csv file name = " + str(fname))
+            print(f"csv file name = '" + str(fname) + "' - File has been parsed")
         else:
             print("Error loading csv file. Check correct file format")
 
@@ -30,8 +28,6 @@ class csv_reader:
             clean_header = []
             for i in range(len(header)):
                 clean_header.append(header[i].strip())
-            # clean_header = [header[0].strip(), header[1].strip(), header[2].strip()]
-            #print(clean_header)
 
             count = 0
             user_data = []                                                                         # Create empty list to fill with CSV row data
@@ -60,7 +56,7 @@ class csv_reader:
                 if count > 500:                                                                    # Condition to stop iterations after 500 entries
                     break                                                                          # to prevent too many entries to be processed at a time
 
-            return clean_header, user_data                                                                      # Print rows to see correct rows are appended
+            return clean_header, user_data                                                         # Print rows to see correct rows are appended
 
 
 # USER CLI INPUTS
@@ -76,7 +72,7 @@ def userCommandLine():
     For a description of the command line directives, please type type '--help' into the command line.
 
     |--- FILE COMMANDS ---|
-    -- file [csv file name]
+    -- file
     --dry_run
     --help
 
@@ -112,6 +108,16 @@ def userCommandLine():
         
         #========================================================================================================#
         """)
+        help_next_input = input("Enter a command: ")
+        if help_next_input == "--dry_run":
+            read = csv_reader()
+            print(read.cleanFile())
+        elif help_next_input == "--file":
+            read = csv_reader()
+            read.cleanFile()
+        else:
+            pass
+
     elif initial_input == "--dry_run":
         read = csv_reader()
         print(read.cleanFile())
@@ -122,7 +128,7 @@ def userCommandLine():
         pass
 
 
-# Create class instances to read and clean file:
+# Run function to start app command line interface
 userCommandLine()
 
 
