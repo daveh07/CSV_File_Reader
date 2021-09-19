@@ -16,7 +16,13 @@ class csv_reader:
     # Function to clean the CSV file from whitespaces, tabs, special characters & validate legal email addresses
     def cleanFile(self):
 
+
         fname = input("Input name of csv file you want to open in format 'example.csv': ")
+
+        if fname.endswith(".csv"):
+            print(f"csv file name = " + str(fname))
+        else:
+            print("Error loading csv file. Check correct file format")
 
         with open(fname, 'r') as csvfile:                                                          # Open CSV file
             csvreader = csv.reader(csvfile, delimiter=',')                                         # Read file using Pythons csv.reader module
@@ -37,10 +43,10 @@ class csv_reader:
                 count = count + 1
 
                 row_1 = row[0].title().strip()                                                     # Title first letter of name & remove whitespaces
-                row_1 = re.sub("[^a-zA-Z]+", "", row_1)                                            # Remove any special characters by Regex
+                row_1 = re.sub("[^a-zA-Z'-]+", "", row_1)                                            # Remove any special characters by Regex
 
                 row_2 = row[1].title().strip()                                                     # Title first letter of surname & remove whitespaces
-                row_2 = re.sub("[^a-zA-Z]+", "", row_2)                                            # Remove any special characters by Regex
+                row_2 = re.sub("[^a-zA-Z'-]+", "", row_2)                                            # Remove any special characters by Regex
 
                 row_3 = row[2].lower().strip()
 
@@ -54,16 +60,16 @@ class csv_reader:
                 if count > 500:                                                                    # Condition to stop iterations after 500 entries
                     break                                                                          # to prevent too many entries to be processed at a time
 
-            return user_data                                                                       # Print rows to see correct rows are appended
+            return clean_header, user_data                                                                      # Print rows to see correct rows are appended
 
 
 # USER CLI INPUTS
 def userCommandLine():
     introduction_text = """
     #========================================================================================================#
-                                        CSV READER APPLICATION - CLI
-                                               version: 1.0
-                                                 21/09/201
+                                           CSV READER APPLICATION - CLI
+                                                  version: 1.0
+                                                    21/09/201
     #========================================================================================================#
 
     Please select from command list below:
@@ -79,6 +85,8 @@ def userCommandLine():
     -u – PostgreSQL username
     -p – PostgreSQL password
     -h – PostgreSQL host
+    
+    #========================================================================================================#
     """
 
     print(introduction_text)
@@ -87,6 +95,11 @@ def userCommandLine():
     initial_input = input("Enter a command: ")
     if initial_input == "--help":
         print("""
+        #========================================================================================================#
+                                             CSV READER APPLICATION - CLI
+                                           HELP - COMMAND LINE DESCRIPTIONS
+        #========================================================================================================#
+        
         -- file [csv file name] - This is the name of the CSV to be parsed
         --dry_run -  This will be used with the (--file) directive in case we want to run the script but not insert 
                      into the DB. All other functions will be executed, but the database won't be altered
@@ -96,6 +109,8 @@ def userCommandLine():
         -u – PostgreSQL username 
         -p – PostgreSQL password
         -h – PostgreSQL host
+        
+        #========================================================================================================#
         """)
     elif initial_input == "--dry_run":
         read = csv_reader()
