@@ -8,7 +8,9 @@ def cleanCSV_Test():
     with open("users.csv", 'r', encoding='utf-8-sig') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         header = next(csv_reader)  # Create list for the header titles
-        clean_header = [header[0].strip(), header[1].strip(), header[2].strip()]
+        clean_header = []
+        for i in range(len(header)):
+            clean_header.append(header[i].strip())
         print(clean_header)
 
         user_data = []
