@@ -5,6 +5,7 @@
 # Import packages and libraries
 import csv
 import re
+import sys
 
 
 # Create CSV reader class that accepts a CSV file input from the user and reads the data in the CSV file.
@@ -12,14 +13,22 @@ class csv_reader:
     def __init__(self):
         super().__init__()
 
+    # Function to clean the CSV file from whitespaces, tabs, special characters & validate legal email addresses
     def cleanFile(self):
-        with open("users.csv", 'r', encoding='utf-8-sig') as csvfile:     # Open CSV file
+
+        fname = input(str("File name in of csv file you would like to open: (in format 'example.csv'): "))
+
+        with open(fname, 'r') as csvfile:                           # Open CSV file
             csvreader = csv.reader(csvfile, delimiter=',')                # Read file using Pythons csv.reader module
             header = next(csvreader)                                      # Create list for the header titles
-            print(header)
+            clean_header = [header[0].strip(), header[1].strip(), header[2].strip()]      # Clean Header text
+            print(clean_header)
 
             count = 0
             user_data = []                                        # Create empty list to fill with CSV row data
+
+            # Regex for validating an Email
+            regex_email = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$' ### TO BE REVIEWED
 
             for row in csvreader:                                 # Iterate through rows in CSV readable file
                 count = count + 1
@@ -31,7 +40,11 @@ class csv_reader:
                 row_2 = re.sub("[^a-zA-Z]+", "", row_2)           # Remove any special characters by Regex
 
                 row_3 = row[2].lower().strip()
-                row_3 = re.sub("[^a-zA-Z, @.]+", "", row_3)       # Remove any special characters for email
+
+                if re.fullmatch(regex_email, row[2]):
+                    row_3 = row_3
+                else:
+                    row_3 = "Invalid Email"
 
                 user_data.append([row_1, row_2, row_3])           # Append cleaned rows to empty user_data list
 
@@ -40,6 +53,7 @@ class csv_reader:
 
             return user_data                                      # Print rows to see correct rows are appended
 
-# Create class instances to read file:
+
+# Create class instances to read and clean file:
 read = csv_reader()
 print(read.cleanFile())
