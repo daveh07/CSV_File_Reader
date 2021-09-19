@@ -1,22 +1,22 @@
-#----------------------------------------- MODULE TESTS ----------------------------------------------#
-# 21/09/2021 - DAVID HILL
-# PYTHON VERSION: 3.9
-#----------------------------------------------------------------------------------------------------------#
-# Import packages and libraries
 import csv
+import re
 
+#-------------------------------- TEST CLEANING CSV TEXT ------------------------------------#
+with open("users.csv", 'r', encoding='utf-8-sig') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
 
-# TEST NI
-def test_ReadFile():
-    with open("users.csv", 'r') as csvfile:  # Open file
-        csvreader = csv.reader(csvfile)  # Read file using Pythons csv.reader module
-        header = next(csvreader)  #
+    user_data = []
 
-        rows = []
-        for row in csvreader:
-            rows.append(row)
-        print("Total no. of rows: %d" % (csvreader.line_num))
-        csvfile.close()
+    for row in csv_reader:
+        row_1 = row[0].title().strip()
+        row_1 = re.sub("[^a-zA-Z]+", "", row_1)
 
+        row_2 = row[1].title().strip()
+        row_2 = re.sub("[^a-zA-Z]+", "", row_2)
 
-test_ReadFile()
+        row_3 = row[2].lower().strip()
+        row_3 = re.sub("[^a-zA-Z, @.]+", "", row_3)
+
+        user_data.append([row_1, row_2, row_3])
+
+    print(user_data)
