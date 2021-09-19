@@ -8,7 +8,7 @@ import re
 import sys
 
 
-# Create CSV reader class that accepts a CSV file input from the user and reads the data in the CSV file.
+# CSV reader class that accepts a CSV file input from the user and reads the data in the CSV file.
 class csv_reader:
     def __init__(self):
         super().__init__()
@@ -21,7 +21,10 @@ class csv_reader:
         with open(fname, 'r') as csvfile:                                                          # Open CSV file
             csvreader = csv.reader(csvfile, delimiter=',')                                         # Read file using Pythons csv.reader module
             header = next(csvreader)                                                               # Create list for the header titles
-            clean_header = [header[0].strip(), header[1].strip(), header[2].strip()]               # Clean Header text
+            clean_header = []
+            for i in range(len(header)):
+                clean_header.append(header[i].strip())
+            # clean_header = [header[0].strip(), header[1].strip(), header[2].strip()]
             print(clean_header)
 
             count = 0
@@ -52,6 +55,7 @@ class csv_reader:
                     break                                                                          # to prevent too many entries to be processed at a time
 
             return user_data                                                                       # Print rows to see correct rows are appended
+
 
 
 # Create class instances to read and clean file:
