@@ -16,19 +16,19 @@ Clone the repository:
 
 > Enter a command from the list
 
-    |--- FILE COMMANDS ---|
-    -- file - Creates a string input for the csv file name to be parsed. The output will parse and clean the csv file. An error will occur for wrong file types
-    --dry_run - Creates a string input for the csv file name to be parsed. The output will parse and clean the csv file and show the csv data output but will not 
-                store to the PostgreSQL database
-    --help   - This will show descriptions of the what the CLI commands on the application interface
+|--- FILE COMMANDS ---|
+-- file - Creates a string input for the csv file name to be parsed. The output will parse and clean the csv file. An error will occur for wrong file types
+--dry_run - Creates a string input for the csv file name to be parsed. The output will parse and clean the csv file and show the csv data output but will not 
+            store to the PostgreSQL database
+--help   - This will show descriptions of the what the CLI commands on the application interface
 
-    |--- PostgreSQL Commands ---|
-    --create_table -             Creates a string input for the csv file name to be parsed. The output will parse and clean the csv file and show the csv data output 
-                                 and will create and store a user table to PostgreSQL database. Invalid emails will not be store and errors will be shown for invalid
-                                 email addresses
-    -u – PostgreSQL username
-    -p – PostgreSQL password
-    -h – PostgreSQL host
+|--- PostgreSQL Commands ---|
+--create_table -             Creates a string input for the csv file name to be parsed. The output will parse and clean the csv file and show the csv data output 
+                             and will create and store a user table to PostgreSQL database. Invalid emails will not be store and errors will be shown for invalid
+                             email addresses
+-u – PostgreSQL username
+-p – PostgreSQL password
+-h – PostgreSQL host
 
 ### NOTE:
 Please feel free to add any contributions! 
