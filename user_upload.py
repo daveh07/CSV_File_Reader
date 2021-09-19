@@ -16,7 +16,7 @@ class csv_reader:
     # Function to clean the CSV file from whitespaces, tabs, special characters & validate legal email addresses
     def cleanFile(self):
 
-        fname = input(str("File name in of csv file you would like to open: (in format 'example.csv'): "))
+        fname = input(str("File name of csv file you would like to open: (in format 'example.csv'): "))
 
         with open(fname, 'r') as csvfile:                                                          # Open CSV file
             csvreader = csv.reader(csvfile, delimiter=',')                                         # Read file using Pythons csv.reader module
