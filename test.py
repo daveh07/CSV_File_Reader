@@ -1,6 +1,7 @@
 import csv
 import re
 import sys
+import psycopg2
 
 
 #-------------------------------- TEST CLEANING CSV TEXT ------------------------------------#
@@ -11,6 +12,7 @@ def cleanCSV_Test():
         clean_header = []
         for i in range(len(header)):
             clean_header.append(header[i].strip())
+        print(type(clean_header))
         print(clean_header)
 
         user_data = []
@@ -28,7 +30,9 @@ def cleanCSV_Test():
 
             user_data.append([row_1, row_2, row_3])
 
+        print(type(user_data))
         print(user_data)
+
 
 # -------------------------------- TEST CLEANING VALIDATING EMAIL ------------------------------------#
 def emailValidationTest():
@@ -69,3 +73,25 @@ def emailValidationTest():
 
 cleanCSV_Test()
 emailValidationTest()
+
+
+#-------------------------------- DATABASE CONNECTION TEST ------------------------------------#
+def create_database_table_test():
+
+
+    db_name = ""
+    db_user = ""
+    db_host = ""
+    db_password = ""
+
+    # Connect to PostgreSQL database
+    conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host)
+
+    cur = conn.curor()
+
+    cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
+
+    cur.close()
+
+    conn.close()
+

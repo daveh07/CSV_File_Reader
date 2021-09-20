@@ -6,6 +6,7 @@
 import csv
 import re
 import sys
+import psycopg2
 
 
 # CSV reader class that accepts a CSV file input from the user and reads the data in the CSV file.
@@ -128,9 +129,32 @@ def userCommandLine():
         pass
 
 
+# Function to connect to PostgreSQL database and create user table
+class database_table(csv_reader):
+    def __init__(self):
+        super(database_table, self).__init__()
+
+    def create_db_table(self, csv_file=""):
+
+        db_name = ""
+        db_user = ""
+        db_host = ""
+        db_password = ""
+
+        # Connect to PostgreSQL database
+        conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host)
+
+        cur = conn.curor()
+
+        cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
+
+        cur.close()
+
+        conn.close()
+
+
 # Run function to start app command line interface
 userCommandLine()
-
 
 
 
