@@ -17,7 +17,9 @@ Clone the repository:
 > To run application, open shell and run in Terminal/Command Line:
 > --file [csv file name]
 >eg.)
+
 > python3 user_input.py --file users.csv --help
+
 > This will return the help menu and list commands
 
 ### NOTE:
