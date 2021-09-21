@@ -2,6 +2,8 @@ import csv
 import re
 import sys
 import psycopg2
+import argparse
+import user_upload
 
 
 #-------------------------------- TEST CLEANING CSV TEXT ------------------------------------#
@@ -45,7 +47,6 @@ def emailValidationTest():
         user_data_email_test = []
         # for validating an Email
         regex_email = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$' #### COME BACK AND REVIEW
-
         for row in csv_reader:
             count = count + 1
 
@@ -78,7 +79,6 @@ emailValidationTest()
 #-------------------------------- DATABASE CONNECTION TEST ------------------------------------#
 def create_database_table_test():
 
-
     db_name = ""
     db_user = ""
     db_host = ""
@@ -95,3 +95,32 @@ def create_database_table_test():
 
     conn.close()
 
+def parsArgs()
+#------------------------------------ TEST COMMAND LINE ARGUMENTS ----------------------------------------------#
+    my_parser = argparse.ArgumentParser(add_help=False)
+    my_parser.add_argument('--file', action='store', type=str, required=True)
+    my_parser.add_argument('--create_table', help='create table', action='store_const', const=True)
+    my_parser.add_argument('--dry_run', help='dry run', action='store_const', const=True)
+    my_parser.add_argument('-u', help='username', action='store', type=str, )
+    my_parser.add_argument('-p', help='password', action='store', type=str, )
+    my_parser.add_argument('-h', help='host', action='store', type=str, )
+    my_parser.add_argument('--help', help='help', action='store_const', const=True)
+
+    args = my_parser.parse_args()
+    if args.help:
+        print('help')
+
+    if args.file:
+        # file name users.csv
+        file_name = args.file
+        print('file')
+    else:
+        print('File must be provided')
+
+    if args.dry_run:
+        # file name users.csv
+        file_name = args.file
+        user_upload.cleanFile(file_name)
+        print('dry_run')
+    else:
+        print('File must be provided')

@@ -1,68 +1,33 @@
-#----------------------------------------- CSV READER SCRIPT ----------------------------------------------#
+# ----------------------------------------- CSV READER SCRIPT ----------------------------------------------#
 # 21/09/2021 - DAVID HILL
 # PYTHON VERSION: 3.9
-#----------------------------------------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------------------------------------#
 # Import packages and libraries
+import argparse
 import csv
 import re
-import sys
-import psycopg2
+
+#import psycopg2
+
+# Command line arguments
+my_parser = argparse.ArgumentParser(add_help=False)
+my_parser.add_argument('--file', action='store', type=str, required=True)
+my_parser.add_argument('--create_table', help='create table', action='store_const', const=True)
+my_parser.add_argument('--dry_run', help='dry run', action='store_const', const=True)
+my_parser.add_argument('-u', help='username', action='store', type=str, )
+my_parser.add_argument('-p', help='password', action='store', type=str, )
+my_parser.add_argument('-h', help='host', action='store', type=str, )
+my_parser.add_argument('--help', help='help', action='store_const', const=True)
+
+# Create Command line Instances
+args = my_parser.parse_args()
 
 
-# CSV reader class that accepts a CSV file input from the user and reads the data in the CSV file.
-class csv_reader:
-    def __init__(self):
-        super().__init__()
+# Function for help command line argument
+def helpFunc(hfile_name=str):
+    hfile_name = fname
 
-    # Function to clean the CSV file from whitespaces, tabs, special characters & validate legal email addresses
-    def cleanFile(self):
-
-        fname = input("Input name of csv file you want to open in format 'example.csv': ")
-        if fname.endswith(".csv"):
-            print(f"csv file name = '" + str(fname) + "' - File has been parsed")
-        else:
-            print("Error loading csv file. Check correct file format")
-
-        with open(fname, 'r') as csvfile:                                                          # Open CSV file
-            csvreader = csv.reader(csvfile, delimiter=',')                                         # Read file using Pythons csv.reader module
-            header = next(csvreader)                                                               # Create list for the header titles
-            clean_header = []
-            for i in range(len(header)):
-                clean_header.append(header[i].strip())
-
-            count = 0
-            user_data = []                                                                         # Create empty list to fill with CSV row data
-
-            # Regex for validating an Email
-            regex_email = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$' ### TO BE REVIEWED
-
-            for row in csvreader:                                                                  # Iterate through rows in CSV readable file
-                count = count + 1
-
-                row_1 = row[0].title().strip()                                                     # Title first letter of name & remove whitespaces
-                row_1 = re.sub("[^a-zA-Z'-]+", "", row_1)                                            # Remove any special characters by Regex
-
-                row_2 = row[1].title().strip()                                                     # Title first letter of surname & remove whitespaces
-                row_2 = re.sub("[^a-zA-Z'-]+", "", row_2)                                            # Remove any special characters by Regex
-
-                row_3 = row[2].lower().strip()
-
-                if re.fullmatch(regex_email, row[2]):
-                    row_3 = row_3
-                else:
-                    row_3 = "Invalid Email"
-
-                user_data.append([row_1, row_2, row_3])                                            # Append cleaned rows to empty user_data list
-
-                if count > 500:                                                                    # Condition to stop iterations after 500 entries
-                    break                                                                          # to prevent too many entries to be processed at a time
-
-            return clean_header, user_data                                                         # Print rows to see correct rows are appended
-
-
-# USER CLI INPUTS
-def userCommandLine():
-    introduction_text = """
+    print("""
     #========================================================================================================#
                                            CSV READER APPLICATION - CLI
                                                   version: 1.0
@@ -73,90 +38,108 @@ def userCommandLine():
     For a description of the command line directives, please type type '--help' into the command line.
 
     |--- FILE COMMANDS ---|
-    -- file
-    --dry_run
-    --help
+    --file [filename.csv]   "This is the name of the CSV to be parsed"
+    --dry_run               "This will be used with the --file directive to run the script but not insert into 
+                             the DB. All other functions will be executed, but the database won't be altered"
+    --help                  "Description of command line directive details"
 
-    |--- PostgreSQL Commands ---|
-    --create_table
+    |--------------------------------------- PostgreSQL Commands --------------------------------------------|
+    --create_table  "This will cause the PostgreSQL users table to be built (No further action will be taken)"
     -u – PostgreSQL username
     -p – PostgreSQL password
     -h – PostgreSQL host
-    
+
     #========================================================================================================#
-    """
+    """)
 
-    print(introduction_text)
-    # print(command_directives)
 
-    initial_input = input("Enter a command: ")
-    if initial_input == "--help":
-        print("""
-        #========================================================================================================#
-                                             CSV READER APPLICATION - CLI
-                                           HELP - COMMAND LINE DESCRIPTIONS
-        #========================================================================================================#
-        
-        -- file [csv file name] - This is the name of the CSV to be parsed
-        --dry_run -  This will be used with the (--file) directive in case we want to run the script but not insert 
-                     into the DB. All other functions will be executed, but the database won't be altered
-    
-        |--- PostgreSQL Commands ---|
-        --create_table - This will create the users database table from the csv and store to the PostgreSQL database
-        -u – PostgreSQL username 
-        -p – PostgreSQL password
-        -h – PostgreSQL host
-        
-        #========================================================================================================#
-        """)
-        help_next_input = input("Enter a command: ")
-        if help_next_input == "--dry_run":
-            read = csv_reader()
-            print(read.cleanFile())
-        elif help_next_input == "--file":
-            read = csv_reader()
-            read.cleanFile()
-        else:
-            pass
+# Function to clean the CSV file from whitespaces, tabs, special characters & validate legal email addresses
+def cleanFile(file_name=str):
+    file_name = fname
 
-    elif initial_input == "--dry_run":
-        read = csv_reader()
-        print(read.cleanFile())
-    elif initial_input == "--file":
-        read = csv_reader()
-        read.cleanFile()
+    with open(file_name, 'r') as csvfile:                    # Open CSV file
+        csvreader = csv.reader(csvfile, delimiter=',')       # Read file using Pythons csv.reader module
+        header = next(csvreader)                             # Create list for the header titles
+        clean_header = []
+        for i in range(len(header)):
+            clean_header.append(header[i].strip())
+
+        user_data = []                                       # Create empty list to fill with CSV row data
+
+        # Regex for validating an Email
+        regex_email = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'    ### TO BE REVIEWED
+
+        # Iterate through rows in CSV readable file
+        for row in csvreader:
+
+            row_1 = row[0].title().strip()                   # Title first letter of name & remove whitespaces
+            row_1 = re.sub("[^a-zA-Z'-]+", "", row_1)        # Remove any special characters by Regex
+
+            row_2 = row[1].title().strip()                   # Title first letter of surname & remove whitespaces
+            row_2 = re.sub("[^a-zA-Z'-]+", "", row_2)        # Remove any special characters by Regex
+
+            row_3 = row[2].lower().strip()                   # Lower case letters of email & remove whitespaces
+
+            # Validate email fields
+            if re.fullmatch(regex_email, row[2]):
+                row_3 = row_3
+            else:
+                row_3 = "Invalid Email"
+
+            user_data.append([row_1, row_2, row_3])          # Append cleaned rows to empty user_data list
+
+        return clean_header, user_data
+
+
+if args.help:                                                # Help command line directive
+    fname = args.file
+    helpFunc(fname)
+
+if args.file:                                                # File command line directive & conditionals
+    fname = args.file
+    if fname.endswith(".csv"):
+        print(f"csv file name = '" + str(fname) + "' - File has been parsed")
     else:
-        pass
+        print("Error loading csv file. Check correct file format")
+else:
+    print('File must be provided')
+    exit()
 
+if args.create_table:                                        # Create Database Table command line & conditionals
+    fname = args.file
+    cleanFile(fname)
+    if args.u and args.p and args.h:
+        print("create table")
+    else:
+        print('Must provide username etc')
+
+if args.dry_run:                                             # Dry run command line directive to clean & print file
+    # process_csv(True)
+    dry_run_fname = args.file
+    read_csv = cleanFile(dry_run_fname)
+    print(read_csv)
+else:
+    pass
 
 # Function to connect to PostgreSQL database and create user table
-class database_table(csv_reader):
+class database_table():
     def __init__(self):
         super(database_table, self).__init__()
 
     def create_db_table(self, csv_file=""):
-
         db_name = ""
         db_user = ""
         db_host = ""
         db_password = ""
 
         # Connect to PostgreSQL database
-        conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host)
+        #conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host)
 
-        cur = conn.curor()
+       # cur = conn.curor()
 
-        cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
+       # cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
 
-        cur.close()
+      #  cur.close()
 
-        conn.close()
-
-
-# Run function to start app command line interface
-userCommandLine()
-
-
-
-
+      #  conn.close()
 
