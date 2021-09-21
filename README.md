@@ -29,7 +29,7 @@ Clone the repository:
 <li>Username = david</li>
 <li>Host = localhost</li>
 <li>Password = ""</li>
-
+<br>
 >Example command to create the database table:
 
 >python3 user_upload.py --file users.csv --create_table -u david -p '' -h 'localhost'
