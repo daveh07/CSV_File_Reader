@@ -3,7 +3,7 @@ A command line application that parses csv files, cleans fields from whitespaces
 
 ### REPL - View Live CLI Application Demo:
 Refer to link below to run the code from Repl.it CLI
-"link to be added soon"
+https://replit.com/@daveh87/CSVFileReaderApp?embed=1#main.py
 
 ### Setup
 Clone the repository:
