@@ -38,7 +38,8 @@ Which returns the following PostgreSQL table:
 
 csv_reader_db=# \d users
                        Table "public.users"
- Column  |          Type          | Collation | Nullable | Default 
+ | Column  |          Type          | Collation | Nullable | Default |
+ | :----:  |          :----:        |  :-----:  |  :----:  |  :----: |
 ---------+------------------------+-----------+----------+---------
  name    | character varying(50)  |           | not null | 
  surname | character varying(50)  |           | not null | 
