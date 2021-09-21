@@ -7,8 +7,9 @@ import argparse
 import csv
 import re
 
-#import psycopg2
+import psycopg2
 
+# GLOBAL DECLARATIONS:
 # Command line arguments
 my_parser = argparse.ArgumentParser(add_help=False)
 my_parser.add_argument('--file', action='store', type=str, required=True)
@@ -22,7 +23,15 @@ my_parser.add_argument('--help', help='help', action='store_const', const=True)
 # Create Command line Instances
 args = my_parser.parse_args()
 
+# Database Parameters
+db_name = "csv_reader_db"
+db_user = "david"
+db_host = "localhost"
+db_password = ""
+db_port = 5432
 
+
+# METHODS:
 # Function for help command line argument
 def helpFunc(hfile_name=str):
     hfile_name = fname
@@ -31,7 +40,7 @@ def helpFunc(hfile_name=str):
     #========================================================================================================#
                                            CSV READER APPLICATION - CLI
                                                   version: 1.0
-                                                    21/09/201
+                                                   21/09/2021
     #========================================================================================================#
 
     Please select from command list below:
@@ -91,6 +100,56 @@ def cleanFile(file_name=str):
         return clean_header, user_data
 
 
+# Function to connect to PostgreSQL database and create user table
+def create_db_table(db_data_file=str):
+    db_data_file = fname
+
+    with open(db_data_file, 'r') as csvfile:  # Open CSV file
+        csvreader = csv.reader(csvfile, delimiter=',')  # Read file using Pythons csv.reader module
+        header = next(csvreader)  # Create list for the header titles
+        clean_header = []
+        for i in range(len(header)):
+            clean_header.append(header[i].strip())
+
+        col_1 = str(clean_header[0])
+        col_2 = str(clean_header[1])
+        col_3 = str(clean_header[2])
+
+    conn = None
+    cur = None
+
+    #Connect to PostgreSQL database
+    try:
+        conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=db_port)
+
+        cur = conn.cursor()
+
+        table_header = f"""CREATE TABLE IF NOT EXISTS users ( 
+                        {col_1} VARCHAR(50) NOT NULL, 
+                        {col_2} VARCHAR(50) NOT NULL, 
+                        {col_3} VARCHAR(250) NOT NULL PRIMARY KEY)"""
+
+        cur.execute(table_header)
+
+        insert_csv_data = (f"INSERT INTO users ({col_1}, {col_2}, {col_3}) VALUES (%s, %s, %s, %s)")
+
+        for row in csvreader:
+            cur.execute(insert_csv_data, row)
+
+        cur.execute('SELECT * FROM users')
+        print(cur.fetchall())
+
+        conn.commit()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+
 if args.help:                                                # Help command line directive
     fname = args.file
     helpFunc(fname)
@@ -109,7 +168,7 @@ if args.create_table:                                        # Create Database T
     fname = args.file
     cleanFile(fname)
     if args.u and args.p and args.h:
-        print("create table")
+        create_db_table(fname)
     else:
         print('Must provide username etc')
 
@@ -121,25 +180,17 @@ if args.dry_run:                                             # Dry run command l
 else:
     pass
 
-# Function to connect to PostgreSQL database and create user table
-class database_table():
-    def __init__(self):
-        super(database_table, self).__init__()
+if args.u:
+    print(f"Username: " + str({args.u}))
+else:
+    pass
 
-    def create_db_table(self, csv_file=""):
-        db_name = ""
-        db_user = ""
-        db_host = ""
-        db_password = ""
+if args.p:
+    print(f"Password: " + str({args.p}))
+else:
+    pass
 
-        # Connect to PostgreSQL database
-        #conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host)
-
-       # cur = conn.curor()
-
-       # cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
-
-      #  cur.close()
-
-      #  conn.close()
-
+if args.h:
+    print(f"Host: " + str({args.h}))
+else:
+    pass

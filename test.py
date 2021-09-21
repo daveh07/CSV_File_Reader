@@ -79,23 +79,28 @@ emailValidationTest()
 #-------------------------------- DATABASE CONNECTION TEST ------------------------------------#
 def create_database_table_test():
 
-    db_name = ""
-    db_user = ""
-    db_host = ""
+
+    db_name = "csv_reader_db"
+    db_user = "david"
+    db_host = "localhost"
     db_password = ""
+    db_port = 5432
 
     # Connect to PostgreSQL database
-    conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host)
+    conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=db_port)
 
-    cur = conn.curor()
+    #cur = conn.curor()
 
-    cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
+   # cur.execute("CREATE TABLE users ( name VARCHAR, surname VARCHAR, email VARCHAR )")
 
-    cur.close()
+   # cur.close()
 
     conn.close()
 
-def parsArgs()
+create_database_table_test()
+
+
+def parsArgs():
 #------------------------------------ TEST COMMAND LINE ARGUMENTS ----------------------------------------------#
     my_parser = argparse.ArgumentParser(add_help=False)
     my_parser.add_argument('--file', action='store', type=str, required=True)
