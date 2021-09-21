@@ -36,11 +36,15 @@ Clone the repository:
 
 Which returns the following PostgreSQL table: 
 
+
+| Schema | Name | Type  | Owner |
+| :----: |:----:|:-----:| :----:|
+ public | users | table | david
+
 csv_reader_db=# \d users
                        Table "public.users"
  | Column  |          Type          | Collation | Nullable | Default |
  | :----:  |          :----:        |  :-----:  |  :----:  |  :----: |
----------+------------------------+-----------+----------+---------
  name    | character varying(50)  |           | not null | 
  surname | character varying(50)  |           | not null | 
  email   | character varying(250) |           | not null | 
