@@ -12,9 +12,13 @@ Clone the repository:
 
 > Py Version: Python 3.9
 
-> Create a virtual environment and run user_upload.py script
+> Create a virtual environment.
 
-> Enter a command from the list
+> To run application, open shell and run in Terminal/Command Line:
+> --file [csv file name]
+>eg.)
+> python3 user_input.py --file users.csv --help
+> This will return the help menu and list commands
 
 ### NOTE:
 Please feel free to add any contributions! 
@@ -24,4 +28,4 @@ Please feel free to add any contributions!
 <li>Using Regex to validate email addresses</li>
 <li>Using open source PostgreSQL data base</li>
 <li>Creating lists of user data to store to PostgreSQL database table</li>
-<li>Input various commands into CLI and use conditional statements to run the certain functions to the appropriate command directive</li>
+<li>Parsed arguments to create Command Line directives using argparse package</li>
