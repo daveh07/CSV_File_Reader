@@ -26,9 +26,9 @@ Clone the repository:
 > This will return the help menu and list commands
 
 ### DATABASE PARAMETERS
-Username = david
-Host = localhost
-Password = ""
+<li>Username = david</li>
+<li>Host = localhost</li>
+<li>Password = ""</li>
 
 ### NOTE:
 Please feel free to add any contributions! 
