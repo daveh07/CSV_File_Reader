@@ -29,6 +29,28 @@ Clone the repository:
 <li>Username = david</li>
 <li>Host = localhost</li>
 <li>Password = ""</li>
+<br>
+>Example command to create the database table:
+
+>python3 user_upload.py --file users.csv --create_table -u david -p '' -h 'localhost'
+
+Which returns the following PostgreSQL table: 
+
+
+| Schema | Name | Type  | Owner |
+| :----: |:----:|:-----:| :----:|
+ public | users | table | david
+
+csv_reader_db=# \d users
+                       Table "public.users"
+ | Column  |          Type          | Collation | Nullable | Default |
+ | :----:  |          :----:        |  :-----:  |  :----:  |  :----: |
+ name    | character varying(50)  |           | not null | 
+ surname | character varying(50)  |           | not null | 
+ email   | character varying(250) |           | not null | 
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (email)
+
 
 ### NOTE:
 Please feel free to add any contributions! 
