@@ -14,6 +14,8 @@ Clone the repository:
 
 > Create a virtual environment.
 
+> pip3 install psycopg2-binary
+
 > To run application, open shell and run in Terminal/Command Line:
 > --file [csv file name]
 
