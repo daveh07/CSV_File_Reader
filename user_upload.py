@@ -76,7 +76,7 @@ def cleanFile(file_name=str):
         user_data = []                                       # Create empty list to fill with CSV row data
 
         # Regex for validating an Email
-        regex_email = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'    ### TO BE REVIEWED
+        regex_email = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
 
         # Iterate through rows in CSV readable file
         for row in csvreader:
@@ -124,20 +124,14 @@ def create_db_table(db_data_file=str):
 
         cur = conn.cursor()
 
-        table_header = f"""CREATE TABLE IF NOT EXISTS users ( 
+        table_header = f"""CREATE TABLE users ( 
                         {col_1} VARCHAR(50) NOT NULL, 
                         {col_2} VARCHAR(50) NOT NULL, 
                         {col_3} VARCHAR(250) NOT NULL PRIMARY KEY)"""
 
         cur.execute(table_header)
 
-        insert_csv_data = (f"INSERT INTO users ({col_1}, {col_2}, {col_3}) VALUES (%s, %s, %s, %s)")
-
-        for row in csvreader:
-            cur.execute(insert_csv_data, row)
-
-        cur.execute('SELECT * FROM users')
-        print(cur.fetchall())
+        insert_csv_data = f"INSERT INTO users ({col_1}, {col_2}, {col_3}) VALUES (%s, %s, %s)"
 
         conn.commit()
 
@@ -164,10 +158,26 @@ else:
     print('File must be provided')
     exit()
 
+if args.u:
+    print(f"Username: " + str({args.u}))
+else:
+    pass
+
+if args.p:
+    args.p = ''
+    print(f"Password: " + str({args.p}))
+else:
+    pass
+
+if args.h:
+    print(f"Host: " + str({args.h}))
+else:
+    pass
+
 if args.create_table:                                        # Create Database Table command line & conditionals
     fname = args.file
     cleanFile(fname)
-    if args.u and args.p and args.h:
+    if args.u and args.h:
         create_db_table(fname)
     else:
         print('Must provide username etc')
@@ -180,17 +190,3 @@ if args.dry_run:                                             # Dry run command l
 else:
     pass
 
-if args.u:
-    print(f"Username: " + str({args.u}))
-else:
-    pass
-
-if args.p:
-    print(f"Password: " + str({args.p}))
-else:
-    pass
-
-if args.h:
-    print(f"Host: " + str({args.h}))
-else:
-    pass
