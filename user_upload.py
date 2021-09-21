@@ -115,6 +115,8 @@ def create_db_table(db_data_file=str):
         col_2 = str(clean_header[1])
         col_3 = str(clean_header[2])
 
+        db_user_data = cleanFile(fname)
+
     conn = None
     cur = None
 
@@ -124,14 +126,20 @@ def create_db_table(db_data_file=str):
 
         cur = conn.cursor()
 
-        table_header = f"""CREATE TABLE users ( 
+        cur.execute('DROP TABLE IF EXISTS users')
+
+        table_header = f"""CREATE TABLE IF NOT EXISTS users ( 
                         {col_1} VARCHAR(50) NOT NULL, 
                         {col_2} VARCHAR(50) NOT NULL, 
                         {col_3} VARCHAR(250) NOT NULL PRIMARY KEY)"""
-
         cur.execute(table_header)
 
-        insert_csv_data = f"INSERT INTO users ({col_1}, {col_2}, {col_3}) VALUES (%s, %s, %s)"
+        insert_csv_data = str(f"INSERT INTO users ({col_1}, {col_2}, {col_3}) VALUES (%s, %s, %s)")
+        insert_user_data = db_user_data
+        for record in insert_user_data:
+            cur.execute(insert_csv_data, record)
+
+        #insert_csv_data
 
         conn.commit()
 
