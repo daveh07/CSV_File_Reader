@@ -26,13 +26,13 @@ Clone the repository:
 > This will return the help menu and list commands
 
 ### DATABASE PARAMETERS
-<li>Username = david</li>
-<li>Host = localhost</li>
+<li>Username = </li>
+<li>Host = </li>
 <li>Password = ""</li>
 <br>
 >Example command to create the database table:
 
->python3 user_upload.py --file users.csv --create_table -u david -p '' -h 'localhost'
+>python3 user_upload.py --file users.csv --create_table -u <username> -p '' -h 'localhost'
 
 Which returns the following PostgreSQL table: 
 
